@@ -27,40 +27,45 @@
 
         var game = {//game object
 
-            word: "", hiddenword: "", remainingGuesses, guessedLetters,
+            word: "", hiddenword: "", remainingGuesses: 9, guessedLetters: "",
 
             selectRandomWord: function () {
                 this.word = words[Math.floor(Math.random() * 10)];
             },
-            generateHiddenWord: function (word) {
-                for (var i = 0; i < word.length; i++) {
-                    this.hiddenword[i] = "_ ";
+            generateHiddenWord: function (someWord) {
+                for (var i = 0; i < someWord.length; i++) {
+                    this.hiddenWord[i] = "_ ";
                 }
             },
             updateHiddenWord: function () {
-                document.querySelector("#word").innerHTML = hiddenword;
+                document.querySelector("#word").innerHTML = this.hiddenWord;
             },
             updateWins: function () {
                 document.querySelector("#wins").innerHTML = "Wins: " + wins;
             },
             updateGuessesRemaining: function () {
-                document.querySelector("#remainingGuesses").innerHTML = "Remaining guesses: " + remainingGuesses;
+                document.querySelector("#remainingGuesses").innerHTML = "Remaining guesses: " + this.remainingGuesses;
             },
             updateGuessedLetters: function () {
-                document.querySelector("#guessedLetters").innerHTML = guessedLetters;
+                document.querySelector("#guessedLetters").innerHTML = this.guessedLetters;
             },
             updateHiddenWord: function (guess) {
-                for (var i = 0; i < word.length; i++) {
-                    if (x === word.charAt(i)) {
-                        hiddenword.charAt(i) = guess;
+                for (var i = 0; i < this.word.length; i++) {
+                    if (x === this.word.charAt(i)) {
+                        this.hiddenWord.charAt(i) = guess;
                     }
                 }
+            },
+            resetGame: function () {
+                this.word = words[Math.floor(Math.random() * 10)];
+                remainingGuesses = 9;
+                guessedLetters = "";
             }
         }//end of game object
 
         //store newWord and newHiddenWord as new variables, so now we're talking about one specific game instance
         var newWord = game.selectRandomWord();
-        newHiddenWord = game.generateHiddenWord(newWord);
+        var newHiddenWord = game.generateHiddenWord(newWord);
         console.log(newWord);//cha-ching!
         console.log(game.hiddenword);
         document.onkeyup = function (event) {
