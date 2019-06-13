@@ -27,15 +27,20 @@
 
         var game = {//game object
 
-            word: "", hiddenword: "", remainingGuesses: 9, guessedLetters: "",
+            word, hiddenWord: "", remainingGuesses: 9, guessedLetters: "",
 
-            selectRandomWord: function () {
+            selectRandomWord() {
                 this.word = words[Math.floor(Math.random() * 10)];
+                return this.word;
             },
-            generateHiddenWord: function (someWord) {
-                for (var i = 0; i < someWord.length; i++) {
-                    this.hiddenWord[i] = "_ ";
+            generateHiddenWord: function () {//getting errors, can't set property '0' of undefined and another error: can't
+                //property 'length' of undefined
+                for (var i = 0; i < this.word.length; i++) {
+                    console.log("i'm in the generateHiddenWorde method");
+                    this.hiddenWord += "_ ";
+                    //this.hiddenWord.charAt(i) = "* ";
                 }
+                return this.hiddenWord;
             },
             updateHiddenWord: function () {
                 document.querySelector("#word").innerHTML = this.hiddenWord;
@@ -66,8 +71,8 @@
         //store newWord and newHiddenWord as new variables, so now we're talking about one specific game instance
         var newWord = game.selectRandomWord();
         var newHiddenWord = game.generateHiddenWord(newWord);
-        console.log(newWord);//cha-ching!
-        console.log(game.hiddenword);
+        console.log(newWord);//
+        console.log(newHiddenWord);
         document.onkeyup = function (event) {
 
             var userGuess = event.key;
