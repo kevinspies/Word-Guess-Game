@@ -71,8 +71,8 @@
         //store newWord and newHiddenWord as new variables, so now we're talking about one specific game instance
         var newWord = game.selectRandomWord();
         var newHiddenWord = game.generateHiddenWord(newWord);
-        console.log(newWord);//
-        console.log(newHiddenWord);
+        console.log(newWord);//WORKING!
+        console.log(newHiddenWord);//WORKING!!
         document.onkeyup = function (event) {
 
             var userGuess = event.key;
