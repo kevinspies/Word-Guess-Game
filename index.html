@@ -27,7 +27,7 @@
 
         var game = {//game object
 
-            word, hiddenword, remainingGuesses, guessedLetters,
+            word: "", hiddenword: "", remainingGuesses, guessedLetters,
 
             selectRandomWord: function () {
                 this.word = words[Math.floor(Math.random() * 10)];
@@ -58,6 +58,11 @@
             }
         }//end of game object
 
+        //store newWord and newHiddenWord as new variables, so now we're talking about one specific game instance
+        var newWord = game.selectRandomWord();
+        newHiddenWord = game.generateHiddenWord(newWord);
+        console.log(newWord);//cha-ching!
+        console.log(game.hiddenword);
         document.onkeyup = function (event) {
 
             var userGuess = event.key;
