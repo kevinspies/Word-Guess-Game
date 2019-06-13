@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kevin's Word Guess Game!</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <img src="birds.jpg" alt="birds">
+    <h1>Press any key to get started!</h1>
+    <p id="wins">Wins:</p>
+    <h1>Current Word</h1>
+    <p id="word">_ _ _ _</p>
+    <p>Number of guesses remaining</p>
+    <p id="remainingGuesses">number here</p>
+    <p>Letters already guessed</p>
+    <p id="guessedLetters">letters here</p>
+
+
+
+    <script>
+        //game object
+        var game = {
+            words: ["aviation", "bluebird", "cloud", "dancer", "eagle", "fantasy", "goldcrest", "happy", "inquire"],
+            word, hiddenword, remainingGuesses,
+
+            selectRandomWord: function () {
+                this.word = words[Math.floor(Math.random() * 10)];
+            },
+            updateWord: function () {
+
+            },
+            updateWins: function () {
+                document.querySelector("#wins").innerHTML = "Wins: " + score;
+            },
+            updateGuessesRemaining: function () {
+                document.querySelector("#remainingGuesses").innerHTML = "Remaining guesses: " + remainingGuesses;
+            }
+        }
+
+        //create the underscore version of the hidden chosen word to display to the user
+        for (var i = 0; i < word.length; i++) {
+            hiddenword[i] = "_ ";
+        }
+
+        function updateHiddenWord(x) {
+
+        }
+        //now let's update the page and show that hidden word so they know how long it is, and we can update it!
+        document.querySelector("#word").innerHTML = hiddenword;
+
+        document.onkeyup = function (event) {
+
+            //for loop through word and update hiddenword
+            var userGuess = event.key;
+            for (var i = 0; i < word.length; i++) {
+                if (userGuess === word.charAt(i)) {
+                    hiddenword.charAt(i) = userGuess;
+                }
+            }
+
+
+
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>
