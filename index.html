@@ -11,7 +11,7 @@
     <img src="birds.jpg" alt="birds">
     <h1>Press any key to get started!</h1>
     <p id="wins">Wins:</p>
-    <h1>Current Word</h1>
+    <p>Current Word</p>
     <p id="word">_ _ _ _</p>
     <p>Number of guesses remaining</p>
     <p id="remainingGuesses">number here</p>
@@ -21,45 +21,47 @@
 
 
     <script>
-        //game object
-        var game = {
-            words: ["aviation", "bluebird", "cloud", "dancer", "eagle", "fantasy", "goldcrest", "happy", "inquire"],
-            word, hiddenword, remainingGuesses,
+
+        var words = ["aviation", "bluebird", "cloud", "dancer", "eagle", "fantasy", "goldcrest", "happy", "inquire"];
+        var wins = 0;
+
+        var game = {//game object
+
+            word, hiddenword, remainingGuesses, guessedLetters,
 
             selectRandomWord: function () {
                 this.word = words[Math.floor(Math.random() * 10)];
             },
-            updateWord: function () {
-
+            generateHiddenWord: function (word) {
+                for (var i = 0; i < word.length; i++) {
+                    this.hiddenword[i] = "_ ";
+                }
+            },
+            updateHiddenWord: function () {
+                document.querySelector("#word").innerHTML = hiddenword;
             },
             updateWins: function () {
-                document.querySelector("#wins").innerHTML = "Wins: " + score;
+                document.querySelector("#wins").innerHTML = "Wins: " + wins;
             },
             updateGuessesRemaining: function () {
                 document.querySelector("#remainingGuesses").innerHTML = "Remaining guesses: " + remainingGuesses;
+            },
+            updateGuessedLetters: function () {
+                document.querySelector("#guessedLetters").innerHTML = guessedLetters;
+            },
+            updateHiddenWord: function (guess) {
+                for (var i = 0; i < word.length; i++) {
+                    if (x === word.charAt(i)) {
+                        hiddenword.charAt(i) = guess;
+                    }
+                }
             }
-        }
-
-        //create the underscore version of the hidden chosen word to display to the user
-        for (var i = 0; i < word.length; i++) {
-            hiddenword[i] = "_ ";
-        }
-
-        function updateHiddenWord(x) {
-
-        }
-        //now let's update the page and show that hidden word so they know how long it is, and we can update it!
-        document.querySelector("#word").innerHTML = hiddenword;
+        }//end of game object
 
         document.onkeyup = function (event) {
 
-            //for loop through word and update hiddenword
             var userGuess = event.key;
-            for (var i = 0; i < word.length; i++) {
-                if (userGuess === word.charAt(i)) {
-                    hiddenword.charAt(i) = userGuess;
-                }
-            }
+
 
 
 
