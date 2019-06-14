@@ -30,9 +30,14 @@
 
             word: "", wordArray: [], hiddenWord: "", hiddenWordArray: [], remainingGuesses: 9, guessedLetters: [], wrongGuesses: [], wins: 0, losses: 0,//guessLetters will be hidden from user, they will just see wrongGuesses
 
-            generateRandomWord() {//updates this.word
+            generateRandomWord: function () {//updates this.word
                 this.word = words[Math.floor(Math.random() * 9)];//0 to 8 index
                 // return this.word;
+            },
+            generateWordArray: function () {
+                for (var i = 0; i < this.word.length; i++) {
+                    this.wordArray[i] = this.word.charAt(i);//gives me a workable array version of the word
+                }
             },
             generateHiddenWordArray: function () {//updates this.hiddenWordArray
                 for (var i = 0; i < this.word.length; i++) {
@@ -99,6 +104,8 @@
         //start a new game and write code and stuff
         game.generateRandomWord();//game's this.word gets updated with a new random word
         var newWord = game.word;//set it to newWord variable
+        game.generateWordArray();
+        var newWordArray = game.generateWordArray();
         game.generateHiddenWordArray();//games this.hiddenWordArray get's updated with the proper number of _'s
         var newHiddenWordArray = game.hiddenWordArray;
         console.log(newWord);
@@ -120,16 +127,24 @@
                 //var numDuplicates = 0;//hotfix var to counteract buggy code
                 for (var i = 0; i < newWord.length; i++) {//run through newWord, if guess matches at any index update newHiddenWordArray at that index and display it
                     // var numDuplicates = 0;
-                    if (userGuess === newHiddenWordArray[i]) {//if correct
-                        newHiddenWordArray[i] = userGuess;//update the newHiddenWordArray of _'s at the proper index with the correct guess
-                        //update that change to the user, showing them their correct guess
-                        // game.remainingGuesses++;//bad way but workable way to counteract a correct guess from subtracting from remaining guesses (quickfix)
-                        //is the games hidden word array even updated ? oh i need to pass newHiddenWord as a parameter?
-                        //this is extra bad because if there are duplicate letters it will give you an extra guess
-                        //i could do another hotfix for this if i create a new counter called - numDuplicates. if numDuplicates>1 i can take away a guess
-                        //i have to initialize it outside this loop
-                        //numDuplicates++;
-                        //if (numDuplicates > 1) game.remainingGuesses--;
+                    if (game.hiddenWordArray.includes(userGuess)) {//correct guess
+                        if (userGuess === newWordArray[i]) {
+                            newHiddenWordArray[i] = userGuess;
+
+                            //*******************************UPDATE THEIR PROGRESS HERE***************************************************
+                            game.updateHiddenWordArray(userGuess);
+                            game.updateHiddenStringToUser();
+
+                            //update the newHiddenWordArray of _'s at the proper index with the correct guess
+                            //update that change to the user, showing them their correct guess
+                            // game.remainingGuesses++;//bad way but workable way to counteract a correct guess from subtracting from remaining guesses (quickfix)
+                            //is the games hidden word array even updated ? oh i need to pass newHiddenWord as a parameter?
+                            //this is extra bad because if there are duplicate letters it will give you an extra guess
+                            //i could do another hotfix for this if i create a new counter called - numDuplicates. if numDuplicates>1 i can take away a guess
+                            //i have to initialize it outside this loop
+                            //numDuplicates++;
+                            //if (numDuplicates > 1) game.remainingGuesses--;
+                        }
                     }
                 }
                 if (userGuess !== newHiddenWordArray[i]) {//incorrect guess
