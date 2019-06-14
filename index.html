@@ -12,7 +12,7 @@
     <h1>Press any key to get started!</h1>
     <p id="wins">Wins:</p>
     <p>Current Word</p>
-    <p id="word">_ _ _ _</p>
+    <p id="hiddenWord">_ _ _ _</p>
     <p>Number of guesses remaining</p>
     <p id="remainingGuesses">number here</p>
     <p>Letters already guessed</p>
@@ -27,23 +27,34 @@
 
         var game = {//game object
 
-            word, hiddenWord: "", remainingGuesses: 9, guessedLetters: "",
+            word: "", wordArray: [], hiddenWord: "", hiddenWordArray: [], remainingGuesses: 9, guessedLetters: [],
 
             selectRandomWord() {
-                this.word = words[Math.floor(Math.random() * 10)];
+                this.word = words[Math.floor(Math.random() * 9)];//0 to
                 return this.word;
             },
-            generateHiddenWord: function () {//getting errors, can't set property '0' of undefined and another error: can't
-                //property 'length' of undefined
-                for (var i = 0; i < this.word.length; i++) {
-                    console.log("i'm in the generateHiddenWorde method");
-                    this.hiddenWord += "_ ";
-                    //this.hiddenWord.charAt(i) = "* ";
+            generateWordArray(someWord) {
+                for (var i = 0; i < someWord.length; i++) {
+                    this.wordArray[i] = someWord.charAt(i);
                 }
-                return this.hiddenWord;
+                return this.wordArray;
+            },
+            generateHiddenWordArray: function () {//don't think i'll need a string hiddenWord actually because array is
+                //so much easier to manipulate and ill be manipulating this one to update their progress
+                for (var i = 0; i < this.word.length; i++) {
+                    this.hiddenWordArray[i] = "_";
+                }
+                return this.hiddenWordArray;
+            },
+            arrayToString: function (someArray) {//to easily convert back to string and use that for innerHTML to update
+                var someString = "";
+                for (var i = 0; i < someArray.length; i++) {
+                    someString += someArray[i];
+                }
+                return someString;
             },
             updateHiddenWord: function () {
-                document.querySelector("#word").innerHTML = this.hiddenWord;
+                document.querySelector("#hiddenWord").innerHTML = arrayToString(this.hiddenWordArray);
             },
             updateWins: function () {
                 document.querySelector("#wins").innerHTML = "Wins: " + wins;
@@ -51,34 +62,73 @@
             updateGuessesRemaining: function () {
                 document.querySelector("#remainingGuesses").innerHTML = "Remaining guesses: " + this.remainingGuesses;
             },
+            addGuessedLetter: function (guess) {
+                this.guessedLetters.push(guess);
+            },
             updateGuessedLetters: function () {
                 document.querySelector("#guessedLetters").innerHTML = this.guessedLetters;
             },
-            updateHiddenWord: function (guess) {
+            updateHiddenWordArray: function (guess) {
                 for (var i = 0; i < this.word.length; i++) {
-                    if (x === this.word.charAt(i)) {
-                        this.hiddenWord.charAt(i) = guess;
+                    if (guess === this.word.charAt(i)) {
+                        this.hiddenWordArray[i] = guess;
                     }
                 }
+            },
+            alreadyGuessed: function (someGuess) {
+                var count = this.guessedLetters.length;
+                for (var i = 0; i < count; i++) {
+                    console.log("inside alreadyGuessed function");
+                    if (this.guessedLetters[i] === someGuess) {
+                        console.log("already guessed!");
+                        return true;
+                    }
+                }
+                return false;
             },
             resetGame: function () {
                 this.word = words[Math.floor(Math.random() * 10)];
                 remainingGuesses = 9;
                 guessedLetters = "";
             }
-        }//end of game object
+        }//end of game object   
 
+
+        //basically where we start a new game and write code and stuff
         //store newWord and newHiddenWord as new variables, so now we're talking about one specific game instance
         var newWord = game.selectRandomWord();
-        var newHiddenWord = game.generateHiddenWord(newWord);
-        console.log(newWord);//WORKING!
-        console.log(newHiddenWord);//WORKING!!
+        var newHiddenWord = game.generateHiddenWordArray(newWord);
+        console.log(newWord);
+        console.log(newHiddenWord);
         document.onkeyup = function (event) {
-
+            console.log("key pressed!");
             var userGuess = event.key;
+            //i want to add the guess to guessedLetters array, but only if it is a unique guess
+            //while (game.remainingGuesses > 0) {//will make this a while loop once i figure out why it crashes the game
+            //while remainingGuesses >0
 
 
+            //logic to ensure no duplicates
+            if (!game.alreadyGuessed(userGuess)) {
+                game.addGuessedLetter(userGuess);//pushes new unique guess to guessedLetters array
+                console.log("added " + userGuess + " to guessed list!");
+                console.log(guessedLetters);
+                game.remainingGuesses--;//if not duplicate guess, substract from remaining guesses, push guessed letter
+                //to guessedLetters, and update html guessedLetters
 
+                //if statement for if they guess correctly - add it to hidden word
+                for (var i = 0; i < newWord.length; i++) {
+                    if (userGuess === newWord[i]) {
+                        newHiddenWord[i] = userGuess;//update the hidden _ _ _ word array at the proper index with the correct guess
+                        game.updateHiddenWord();
+                    }
+                }
+                game.updateGuessedLetters();
+                game.updateGuessesRemaining();
+                game.remainingGuesses--;
+                console.log("reached end of code");
+            }
+            //else they already guessed it
 
 
         }
