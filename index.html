@@ -23,7 +23,7 @@
 
 
     <script>
-
+        //console game.word to see what the word is for testing purposes if you want! will help understand the process of the code better too
         var words = ["aviation", "bluebird", "cloud", "dancer", "eagle", "fantasy", "goldcrest", "happy", "inquire"];
 
         var game = {//game object
@@ -124,9 +124,8 @@
                 game.addGuessedLetter(userGuess);//pushes new unique guess to guessedLetters array
                 console.log("added " + userGuess + " to guessed list!");
 
-                //var numDuplicates = 0;//hotfix var to counteract buggy code
                 for (var i = 0; i < newWord.length; i++) {//run through newWord, if guess matches at any index update newHiddenWordArray at that index and display it
-                    // var numDuplicates = 0;
+
                     if (game.hiddenWordArray.includes(userGuess)) {//correct guess
                         if (userGuess === newWordArray[i]) {
                             newHiddenWordArray[i] = userGuess;
@@ -135,25 +134,15 @@
                             game.updateHiddenWordArray(userGuess);
                             game.updateHiddenStringToUser();
 
-                            //update the newHiddenWordArray of _'s at the proper index with the correct guess
-                            //update that change to the user, showing them their correct guess
-                            // game.remainingGuesses++;//bad way but workable way to counteract a correct guess from subtracting from remaining guesses (quickfix)
-                            //is the games hidden word array even updated ? oh i need to pass newHiddenWord as a parameter?
-                            //this is extra bad because if there are duplicate letters it will give you an extra guess
-                            //i could do another hotfix for this if i create a new counter called - numDuplicates. if numDuplicates>1 i can take away a guess
-                            //i have to initialize it outside this loop
-                            //numDuplicates++;
-                            //if (numDuplicates > 1) game.remainingGuesses--;
                         }
                     }
                 }
                 if (userGuess !== newHiddenWordArray[i]) {//incorrect guess
                     game.addWrongGuess(userGuess);//adds incorrect userGuess to wrongGuesses
-                    game.loseOneGuess();//coulda done this in one method, whatever!
+                    game.loseOneGuess();//coulda done these in one method, whatever!
                     console.log("hello there");
                 }
             }
-
 
             if (game.remainingGuesses <= 0) {
                 game.resetGame();
