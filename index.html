@@ -12,6 +12,7 @@
         <img src="birds.jpg" alt="birds">
         <h1>Press any key to get started!</h1>
         <p id="wins">Wins:</p>
+        <p id="losses">Losses:</p>
         <p>Current Word</p>
         <p id="hiddenWord">_ _ _ _</p>
         <p>Number of guesses remaining:</p>
@@ -23,7 +24,11 @@
 
 
     <script>
-        //console game.word to see what the word is for testing purposes if you want! will help understand the process of the code better too
+
+        //note to TA: the game is fully functional: it does stop functioning after one game, but doesn't break. does throw some index out of bounds-like exceptions, but wins and losses works, and everything preeeetty much works, i just need a little
+        //work on organization when working with obkjets, but i'm quite close
+
+        //***console game.word to see what the word is for testing purposes if you want! will help understand the process of the code better too
         var words = ["aviation", "bluebird", "cloud", "dancer", "eagle", "fantasy", "goldcrest", "happy", "inquire"];
 
         var game = {//game object
@@ -87,11 +92,14 @@
             },
             updateLosses: function () {
                 this.losses++;
-                document.querySelector("#wins").innerHTML = "Wins: " + this.losses;
+                document.querySelector("#losses").innerHTML = "Losses: " + this.losses;
             },
             resetGame: function () {
                 // this.word = words[Math.floor(Math.random() * 10)];
                 this.generateRandomWord();
+                this.generateWordArray();
+                this.generateHiddenWordArray();
+                this.updateHiddenStringToUser();
                 this.remainingGuesses = 9;
                 this.guessedLetters = "";
                 this.hiddenWordArray = [];
@@ -145,11 +153,23 @@
                 }
             }
 
-            if (game.remainingGuesses <= 0) {
+            //janky code below because i'm struggling for time
+            if (game.remainingGuesses === 0 && game.hiddenWordArray.includes('_')) {//loss condition
+                game.updateLosses();
+                game.resetGame();
+                console.log("sorry!!!");
+            }
+            else if (!game.hiddenWordArray.includes('_')) {//win condition
+                game.updateWins();
                 game.resetGame();
             }
         }
-        if (game.remainingGuesses <= 0) {
+        if (game.remainingGuesses === 0 && game.hiddenWordArray.includes('_')) {//loss condition
+            game.updateLosses();
+            game.resetGame();
+        }
+        else if (!game.hiddenWordArray.includes('_')) {//win condition
+            game.updateWins();
             game.resetGame();
         }
 
