@@ -53,8 +53,12 @@
                 }
                 return someString;
             },
-            updateHiddenWord: function () {
-                document.querySelector("#hiddenWord").innerHTML = arrayToString(this.hiddenWordArray);
+            updateHiddenWord: function (hidden) {
+                for (var i = 0; i < hidden.length; i++) {
+                    this.hiddenWordArray[i] = hidden[i];
+                }
+                document.querySelector("#hiddenWord").innerHTML = this.arrayToString(this.hiddenWordArray);
+                console.log("updatehiddenword called");
             },
             updateWins: function () {
                 document.querySelector("#wins").innerHTML = "Wins: " + wins;
@@ -97,6 +101,8 @@
         //basically where we start a new game and write code and stuff
         //store newWord and newHiddenWord as new variables, so now we're talking about one specific game instance
         var newWord = game.selectRandomWord();
+        var newWordArray = game.generateWordArray(newWord);//i want this to be an array so i can check through it at an index to see if
+        //its a correct guess (line 125)
         var newHiddenWord = game.generateHiddenWordArray(newWord);
         console.log(newWord);
         console.log(newHiddenWord);
@@ -112,20 +118,21 @@
             if (!game.alreadyGuessed(userGuess)) {
                 game.addGuessedLetter(userGuess);//pushes new unique guess to guessedLetters array
                 console.log("added " + userGuess + " to guessed list!");
-                console.log(guessedLetters);
                 game.remainingGuesses--;//if not duplicate guess, substract from remaining guesses, push guessed letter
                 //to guessedLetters, and update html guessedLetters
 
                 //if statement for if they guess correctly - add it to hidden word
-                for (var i = 0; i < newWord.length; i++) {
-                    if (userGuess === newWord[i]) {
+                for (var i = 0; i < newWordArray.length; i++) {
+                    if (userGuess === newWordArray[i]) {
                         newHiddenWord[i] = userGuess;//update the hidden _ _ _ word array at the proper index with the correct guess
-                        game.updateHiddenWord();
+                        game.updateHiddenWord(newHiddenWord);//**************i think this is where my logic is wrong**************
+                        //is the games hidden word array even updated ? oh i need to pass newHiddenWord as a parameter?
                     }
                 }
                 game.updateGuessedLetters();
                 game.updateGuessesRemaining();
                 game.remainingGuesses--;
+
                 console.log("reached end of code");
             }
             //else they already guessed it
