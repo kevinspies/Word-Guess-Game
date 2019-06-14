@@ -8,16 +8,18 @@
 </head>
 
 <body>
-    <img src="birds.jpg" alt="birds">
-    <h1>Press any key to get started!</h1>
-    <p id="wins">Wins:</p>
-    <p>Current Word</p>
-    <p id="hiddenWord">_ _ _ _</p>
-    <p>Number of guesses remaining</p>
-    <p id="remainingGuesses">number here</p>
-    <p>Letters already guessed</p>
-    <p id="guessedLetters">letters here</p>
-
+    <div id="everything">
+        <img src="birds.jpg" alt="birds">
+        <h1>Press any key to get started!</h1>
+        <p id="wins">Wins:</p>
+        <p>Current Word</p>
+        <p id="hiddenWord">_ _ _ _</p>
+        <p>Number of guesses remaining</p>
+        <p id="remainingGuesses">number here</p>
+        <p>Letters already guessed</p>
+        <p id="guessedLetters">letters here</p>
+    </div>
+    <embed loop="true" src="sound.wav" hidden="true" type="video/quicktime"></embed>
 
 
     <script>
@@ -137,7 +139,9 @@
             }
             //else they already guessed it
 
-
+            if (remainingGuesses < 0) {
+                game.resetGame();
+            }
         }
 
 
