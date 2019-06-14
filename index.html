@@ -92,6 +92,9 @@
                 }
                 return false;
             },
+            loseOneGuess: function () {
+                this.remainingGuesses--;
+            },
             resetGame: function () {
                 this.word = words[Math.floor(Math.random() * 10)];
                 remainingGuesses = 9;
@@ -116,26 +119,29 @@
             //while remainingGuesses >0
 
 
-            //logic to ensure no duplicates
+            //if not already guessed
             if (!game.alreadyGuessed(userGuess)) {
                 game.addGuessedLetter(userGuess);//pushes new unique guess to guessedLetters array
                 console.log("added " + userGuess + " to guessed list!");
-                game.remainingGuesses--;//if not duplicate guess, substract from remaining guesses, push guessed letter
-                //to guessedLetters, and update html guessedLetters
 
-                //if statement for if they guess correctly - add it to hidden word
+                //run through word, if guess matches at any index update hidden word at that index and display it
                 for (var i = 0; i < newWordArray.length; i++) {
                     if (userGuess === newWordArray[i]) {
                         newHiddenWord[i] = userGuess;//update the hidden _ _ _ word array at the proper index with the correct guess
                         game.updateHiddenWord(newHiddenWord);//**************i think this is where my logic is wrong**************
+                        game.remainingGuesses++;//bad way but workable way to counteract a correct guess from subtracting from remaining guesses (quickfix)
                         //is the games hidden word array even updated ? oh i need to pass newHiddenWord as a parameter?
                     }
                 }
+                game.loseOneGuess();
+                console.log("one guess USED, sorry, this is hard mode");
+
+                //game.remainingGuesses--;//if not duplicate guess, substract from remaining guesses, push guessed letter
+                //to guessedLetters, and update html guessedLetters
+
                 game.updateGuessedLetters();
                 game.updateGuessesRemaining();
-                game.remainingGuesses--;
 
-                console.log("reached end of code");
             }
             //else they already guessed it
 
