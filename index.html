@@ -74,7 +74,7 @@
             alreadyGuessed: function (someGuess) {//boolean to tell if I've already guessed a word, checks against guessedLetters[]
                 var count = this.guessedLetters.length;
                 for (var i = 0; i < count; i++) {
-                    console.log("inside alreadyGuessed function");
+                    console.log("checking if guessed");
                     if (this.guessedLetters[i] === someGuess) {
                         console.log("already guessed!");
                         return true;
@@ -104,7 +104,8 @@
                 this.guessedLetters = "";
                 this.hiddenWordArray = [];
                 this.hiddenWord = "";
-                this.word = "";
+                // this.word = ""; BEEEEP this just overrides generate function dummy!
+                this.wrongGuesses = [];
             }
         }//end of game object   
         //***********************************************************************************************************************************************************
@@ -127,51 +128,71 @@
             //i want to add the guess to guessedLetters array, but only if it is a unique guess
             //while (game.remainingGuesses > 0) {//will make this a while loop once i figure out why it crashes the game
             //while remainingGuesses >0
-            game.updateHiddenWordArray(userGuess);
-            game.updateHiddenStringToUser();
             if (!game.alreadyGuessed(userGuess)) {//if not already guessed
                 game.addGuessedLetter(userGuess);//pushes new unique guess to guessedLetters array
                 console.log("added " + userGuess + " to guessed list!");
 
                 for (var i = 0; i < newWord.length; i++) {//run through newWord, if guess matches at any index update newHiddenWordArray at that index and display it
 
-                    if (game.hiddenWordArray.includes(userGuess)) {//correct guess
-                        if (userGuess === newWordArray[i]) {
-                            newHiddenWordArray[i] = userGuess;
-
-                            //*******************************UPDATE THEIR PROGRESS HERE***************************************************
-                            game.updateHiddenWordArray(userGuess);
-                            game.updateHiddenStringToUser();
-
-                        }
+                    if (newWordArray[i] === userGuess) {//correct guess
+                        newHiddenWordArray[i] = userGuess;//useless statement?
+                        game.hiddenWordArray[i] = userGuess;
+                        //*******************************UPDATE THEIR PROGRESS HERE***************************************************
+                        game.updateHiddenWordArray(userGuess);
+                        game.updateHiddenStringToUser();
+                    }
+                    if (userGuess !== newHiddenWordArray[i]) {//incorrect guess
+                        console.log("incorrect guess");
+                        game.addWrongGuess(userGuess);//adds incorrect userGuess to wrongGuesses
+                        game.loseOneGuess();//coulda done these in one method, whatever!
                     }
                 }
-                if (userGuess !== newHiddenWordArray[i]) {//incorrect guess
-                    game.addWrongGuess(userGuess);//adds incorrect userGuess to wrongGuesses
-                    game.loseOneGuess();//coulda done these in one method, whatever!
-                    console.log("hello there");
+
+                if (game.remainingGuesses === 0 && game.hiddenWordArray.includes('_')) {//loss condition
+                    game.updateLosses();
+                    game.resetGame();
+                    console.log("loss detected!");
+                    //start a new game
+                    game.generateRandomWord();//game's this.word gets updated with a new random word
+                    var newWord = game.word;//set it to newWord variable
+                    game.generateWordArray();
+                    var newWordArray = game.generateWordArray();
+                    game.generateHiddenWordArray();//games this.hiddenWordArray get's updated with the proper number of _'s
+                    var newHiddenWordArray = game.hiddenWordArray;
+                    console.log(newWord);
+                    console.log(newHiddenWordArray);
+                    game.updateHiddenStringToUser();
                 }
+                else if (!game.hiddenWordArray.includes('_')) {//win condition
+                    console.log("win detected!");
+                    game.updateWins();
+                    game.resetGame();
+                    //start a new game
+                    game.generateRandomWord();//game's this.word gets updated with a new random word
+                    var newWord = game.word;//set it to newWord variable
+                    game.generateWordArray();
+                    var newWordArray = game.generateWordArray();
+                    game.generateHiddenWordArray();//games this.hiddenWordArray get's updated with the proper number of _'s
+                    var newHiddenWordArray = game.hiddenWordArray;
+                    console.log(newWord);
+                    console.log(newHiddenWordArray);
+                    game.updateHiddenStringToUser();
+                }
+                //everything should be nested in the logic of ignoring repeat guesses, even winning and losing
             }
 
-            //janky code below because i'm struggling for time
-            if (game.remainingGuesses === 0 && game.hiddenWordArray.includes('_')) {//loss condition
-                game.updateLosses();
-                game.resetGame();
-                console.log("sorry!!!");
-            }
-            else if (!game.hiddenWordArray.includes('_')) {//win condition
-                game.updateWins();
-                game.resetGame();
-            }
         }
-        if (game.remainingGuesses === 0 && game.hiddenWordArray.includes('_')) {//loss condition
-            game.updateLosses();
-            game.resetGame();
-        }
-        else if (!game.hiddenWordArray.includes('_')) {//win condition
-            game.updateWins();
-            game.resetGame();
-        }
+
+
+        // if (game.remainingGuesses === 0 && game.hiddenWordArray.includes('_')) {//loss condition
+        //     console.log("loss detected!");
+        //     game.updateLosses();
+        //     game.resetGame();
+        // }
+        // else if (!game.hiddenWordArray.includes('_')) {//win condition
+        //     game.updateWins();
+        //     game.resetGame();
+        // }
 
 
 
