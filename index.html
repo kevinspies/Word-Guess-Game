@@ -25,15 +25,14 @@
 
     <script>
 
-        //note to TA: the game is fully functional: it does stop functioning after one game, but doesn't break. does throw some index out of bounds-like exceptions, but wins and losses works, and everything preeeetty much works, i just need a little
-        //work on organization when working with obkjets, but i'm quite close
+        //note to TA: OVERHAUL IN PROGRESS
 
         //***console game.word to see what the word is for testing purposes if you want! will help understand the process of the code better too
         var words = ["aviation", "bluebird", "cloud", "dancer", "eagle", "fantasy", "goldcrest", "happy", "inquire"];
 
         var game = {//game object
 
-            word: "", wordArray: [], hiddenWord: "", hiddenWordArray: [], remainingGuesses: 9, guessedLetters: [], wrongGuesses: [], wins: 0, losses: 0,//guessLetters will be hidden from user, they will just see wrongGuesses
+            word: "", wordArray: [], hiddenWord: "", hiddenWordArray: [], remainingGuesses: 9, guessedLetters: [], wrongGuesses: [], wrongGuessesString: "", wins: 0, losses: 0,//guessLetters will be hidden from user, they will just see wrongGuesses or really wrongGuessesString
 
             generateRandomWord: function () {//updates this.word
                 this.word = words[Math.floor(Math.random() * 9)];//0 to 8 index
@@ -67,9 +66,12 @@
             addGuessedLetter: function (guess) {//array to hold all guessed letters
                 this.guessedLetters.push(guess);
             },
-            addWrongGuess: function (guess) {//array to hold wrong guesses, which i display to the user
+            addWrongGuess: function (guess) {//array to hold wrong guesses, which i display to the user as a string now
                 this.wrongGuesses.push(guess);
-                document.querySelector("#guessedLetters").innerHTML = this.wrongGuesses;
+                for (var i = 0; i < wrongGuesses.length; i++) {
+                    this.wrongGuessesString += wrongGuesses[i];
+                }
+                document.querySelector("#guessedLetters").innerHTML = this.wrongGuessesString;
             },
             alreadyGuessed: function (someGuess) {//boolean to tell if I've already guessed a word, checks against guessedLetters[]
                 var count = this.guessedLetters.length;
@@ -113,11 +115,11 @@
 
         //start a new game
         game.generateRandomWord();//game's this.word gets updated with a new random word
-        var newWord = game.word;//set it to newWord variable
+        var newWord = game.word;//set it to newWord variable don't need
         game.generateWordArray();
-        var newWordArray = game.generateWordArray();
+        var newWordArray = game.wordArray;//don't need
         game.generateHiddenWordArray();//games this.hiddenWordArray get's updated with the proper number of _'s
-        var newHiddenWordArray = game.hiddenWordArray;
+        var newHiddenWordArray = game.hiddenWordArray;//don't need
         console.log(newWord);
         console.log(newHiddenWordArray);
         game.updateHiddenStringToUser();
@@ -132,20 +134,21 @@
                 game.addGuessedLetter(userGuess);//pushes new unique guess to guessedLetters array
                 console.log("added " + userGuess + " to guessed list!");
 
-                for (var i = 0; i < newWord.length; i++) {//run through newWord, if guess matches at any index update newHiddenWordArray at that index and display it
+                for (var i = 0; i < game.word.length; i++) {//run through game word, if guess matches at any index update newHiddenWordArray at that index and display it
 
-                    if (newWordArray[i] === userGuess) {//correct guess
-                        newHiddenWordArray[i] = userGuess;//useless statement?
+                    if (game.wordArray[i] === userGuess) {//correct guess
+                        console.log("correct!");//this logic is not being reached!!!?
                         game.hiddenWordArray[i] = userGuess;
                         //*******************************UPDATE THEIR PROGRESS HERE***************************************************
                         game.updateHiddenWordArray(userGuess);
                         game.updateHiddenStringToUser();
                     }
-                    if (userGuess !== newHiddenWordArray[i]) {//incorrect guess
-                        console.log("incorrect guess");
-                        game.addWrongGuess(userGuess);//adds incorrect userGuess to wrongGuesses
-                        game.loseOneGuess();//coulda done these in one method, whatever!
-                    }
+
+                }
+                if (userGuess !== game.wordArray[i]) {//incorrect guess
+                    console.log("incorrect guess");
+                    game.addWrongGuess(userGuess);//adds incorrect userGuess to wrongGuesses
+                    game.loseOneGuess();//coulda done these in one method, whatever!
                 }
 
                 if (game.remainingGuesses === 0 && game.hiddenWordArray.includes('_')) {//loss condition
