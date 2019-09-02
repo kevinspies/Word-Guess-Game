@@ -43,6 +43,10 @@ let guess = "";
 console.log(progressArr);
 document.onkeyup = function(event) {
     guess = event.key.toLowerCase();
+    if(!lettersGuessed.includes(guess)){
+        lettersGuessed.push(guess);
+        console.log("guesses: "+lettersGuessed);
+    }
     if(word.includes(guess)){
         update(guess);
         console.log(progressArr);
