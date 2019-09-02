@@ -20,6 +20,8 @@ let progressArr = [];
 for (let i = 0; i < word.length; i++) {
   progressArr.push("_");
 }
+document.querySelector("#currentWord").innerHTML = showProgress(progressArr);
+
 function update(letter) {
   for (let i = 0; i < word.length; i++) {
     if (word.charAt(i) == letter) {
@@ -36,7 +38,7 @@ function showProgress(someArr) {
   return progressString;
 }
 
-let guessesRemaining = 9;
+let incorrectGuessesRemaining = 7;
 let lettersGuessed = [];
 let guess = "";
 
@@ -55,6 +57,7 @@ document.onkeyup = function(event) {
             }
             else{
                 console.log("incorrect");
+                incorrectGuessesRemaining--;
             }
         }
         else console.log("already guessed");
