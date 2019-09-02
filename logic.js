@@ -43,16 +43,26 @@ let guess = "";
 console.log(progressArr);
 document.onkeyup = function(event) {
     guess = event.key.toLowerCase();
-    if(!lettersGuessed.includes(guess)){
-        lettersGuessed.push(guess);
-        console.log("guesses: "+lettersGuessed);
+    if(guess.match(/[a-z]/i)){
+        console.log("letter pressed");
+        if(!lettersGuessed.includes(guess)){//if its a unique letter guessed
+            lettersGuessed.push(guess);
+            console.log("guesses: "+lettersGuessed);
+            if(word.includes(guess)){//if its a correct guess
+                console.log("correct");
+                update(guess);
+                console.log(progressArr);
+            }
+            else{
+                console.log("incorrect");
+            }
+        }
+        else console.log("already guessed");
     }
-    if(word.includes(guess)){
-        update(guess);
-        console.log(progressArr);
+    else{
+        console.log("please enter a letter");
     }
-
-
+console.log("----------");
 };
 
 // useful things..
