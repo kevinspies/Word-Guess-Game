@@ -7,14 +7,28 @@ const words = [
   "fantasy",
   "goldcrest",
   "happy",
-  "inquire"
+  "inquire",
+  "swallow",
+  "castle",
+  "peregrine",
+  "dive",
+  "soar",
+  "dragon",
+  "ardor",
+  "sail",
+  "bunny",
+  "inclination",
+  "ergonomics",
+  "instantiation",
+  "inflamation",
+  "conflagration",
+  "extinguish"
 ];
-
-let word = words[Math.floor(Math.random() * words.length)];
-console.log(word);
 let wins = 0;
 let losses = 0;
-let gameIsOver = false;
+let word = words[Math.floor(Math.random() * words.length)];
+console.log(word);
+//let gameIsOver = false;
 
 let progressArr = [];
 for (let i = 0; i < word.length; i++) {
@@ -33,39 +47,82 @@ function update(letter) {
 function showProgress(someArr) {
   let progressString = "";
   for (let i = 0; i < someArr.length; i++) {
-    progressString+=someArr[i]+" ";
+    progressString += someArr[i] + " ";
   }
   return progressString;
 }
+function newGame() {
+  word = words[Math.floor(Math.random() * words.length)];
+  console.log(word);
+  progressArr = [];
+  for (let i = 0; i < word.length; i++) {
+    progressArr.push("_");
+  }
+  document.querySelector("#currentWord").innerHTML = showProgress(progressArr);
+  incorrectGuessesRemaining = 6;
+  lettersGuessed = [];
+  incorrectLettersGuessed = [];
+  guess = "";
+}
 
-let incorrectGuessesRemaining = 7;
+let incorrectGuessesRemaining = 6;
 let lettersGuessed = [];
+let incorrectLettersGuessed = [];
 let guess = "";
-
 console.log(progressArr);
 document.onkeyup = function(event) {
-    guess = event.key.toLowerCase();
-    if(guess.match(/[a-z]/i)){
-        console.log("letter pressed");
-        if(!lettersGuessed.includes(guess)){//if its a unique letter guessed
-            lettersGuessed.push(guess);
-            console.log("guesses: "+lettersGuessed);
-            if(word.includes(guess)){//if its a correct guess
-                console.log("correct");
-                update(guess);
-                console.log(progressArr);
-            }
-            else{
-                console.log("incorrect");
-                incorrectGuessesRemaining--;
-            }
+  guess = event.key.toLowerCase();
+  if (
+    guess.match(/[a-z]/i) &&
+    guess !== "shift" &&
+    guess !== "control" &&
+    guess !== "alt" &&
+    guess !== "backspace"
+  ) {
+    //account for f keys as well, also think of better way
+    // if( guess.toUpperCase() != guess.toLowerCase() ){
+    console.log("letter pressed");
+    if (incorrectGuessesRemaining > 0 && progressArr.includes("_")) {
+      //if still have guesses, and still have underscores
+      if (!lettersGuessed.includes(guess)) {
+        //if its a unique letter guessed
+        lettersGuessed.push(guess);
+        console.log("guesses: " + lettersGuessed);
+        if (word.includes(guess)) {
+          //if its a correct guess
+          console.log("correct");
+          update(guess);
+          console.log(progressArr);
+        } else {
+          console.log("incorrect");
+          incorrectGuessesRemaining--;
+          incorrectLettersGuessed.push(guess);
+          document.querySelector("#numGuessesRemaining").innerHTML =
+            "" + incorrectGuessesRemaining;
+          document.querySelector(
+            "#lettersAlreadyGuessed"
+          ).innerHTML = incorrectLettersGuessed.toString();
         }
-        else console.log("already guessed");
+      } else console.log("already guessed");
     }
-    else{
-        console.log("please enter a letter");
+    //game over condition met here
+    else {
+      console.log("game end detected");
+      if (incorrectGuessesRemaining == 0) {
+        console.log("out of guesses");
+        losses++;
+        document.querySelector("#numLosses").innerHTML = losses;
+        newGame();
+      } else if (!progressArr.includes("_")) {
+        console.log("you won!");
+        wins++;
+        document.querySelector("#numWins").innerHTML = wins;
+        newGame();
+      }
     }
-console.log("----------");
+  } else console.log("please enter a letter");
+
+  console.log("-----------------------");
 };
 
 // useful things..
@@ -78,7 +135,7 @@ console.log("----------");
 // <p>Losses: <span id="numLosses">0</span></p>
 // <p>Current Word: <span id="currentWord"></span></p>
 // <p>Number of guesses remaining: <span id="numGuessesRemaining"></span></p>
-// <p>Letters already guessed: <span id="lettersAlreadyGuessed"></span></p> 
+// <p>Letters already guessed: <span id="lettersAlreadyGuessed"></span></p>
 
 // ideas i could implement -
 // webscraping new libraries (user option to mix things up)
