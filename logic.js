@@ -59,6 +59,8 @@ function newGame() {
     progressArr.push("_");
   }
   document.querySelector("#currentWord").innerHTML = showProgress(progressArr);
+  document.querySelector("#numGuessesRemaining").innerHTML = 6;
+  document.querySelector("#lettersAlreadyGuessed").innerHTML = "";
   incorrectGuessesRemaining = 6;
   lettersGuessed = [];
   incorrectLettersGuessed = [];
